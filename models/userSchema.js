@@ -54,6 +54,7 @@ const userSchema = Schema(
       type: String,
       enum: ["buyer", "supplier"],
     },
+    userId: { type: String, unique: true, required: [true, "Missing unique ID Number"] },
     isActive: { type: Boolean, default: true },
     membershipStatus: {
       type: String,

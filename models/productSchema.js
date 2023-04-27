@@ -18,6 +18,7 @@ const productSchema = Schema(
     quantity: { type: Number, maxLength: [9, "Amount out of line"] },
     supplier: { type: ObjectId, ref: "User", required: true },
     photo: [{ type: Object, required: true }],
+    skuNumber: { type: String, required: true },
   },
   { timestamps: true },
 );

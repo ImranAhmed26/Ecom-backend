@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import nid from "nid";
 
 import User from "../models/userSchema.js";
 import { comparePassword, hashPassword } from "../utils/auth.js";
@@ -22,20 +23,18 @@ const RegisterUser = async (req, res) => {
     let userEmailExist = await User.findOne({ email }).exec();
     if (userEmailExist) return res.status(401).send("Email is taken");
 
-    // if (!companyName) res.status(400).send("Company Name is required");
-    let companyNameExist = await User.findOne({ companyName }).exec();
-    if (companyNameExist) return res.status(401).send("Company Name is Taken");
-
     if (!phone) return res.status(400).send("Phone Number is required");
     let phoneNumberExist = await User.findOne({ phone }).exec();
     if (phoneNumberExist) return res.status(401).send("Phone number is taken");
 
-    // Hash Password
+    // Unique ID number
+    const uniqueNumber = nid({ alphabet: "1234567890", length: 7 });
+    const userId = `RMG-0${uniqueNumber()}`;
 
+    // Hash Password
     const hashedPassword = await hashPassword(password);
 
     // Register
-
     const user = new User({
       name,
       email,
@@ -45,6 +44,7 @@ const RegisterUser = async (req, res) => {
       type,
       faxNumber,
       website,
+      userId,
       password: hashedPassword,
     });
 

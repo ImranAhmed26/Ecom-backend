@@ -1,22 +1,31 @@
 import fs from "fs";
 import formidable from "formidable";
 import _ from "lodash";
+import nid from "nid";
 import { cloudinary } from "../utils/cloudinaryConfig.js";
 
 import Product from "../models/productSchema.js";
-import User from "../models/userSchema.js";
 
 const createProduct = async (req, res) => {
-  // console.log("req", req.user._id);
   const { name, description, category, unitPrice, quantity, supplier, photo } = req.body;
   if (!name || !description || !unitPrice || !category || !quantity)
     return res.status(400).json({ error: "Missing fields. All fields are required." });
 
+  // Unique ID number
+  const uniqueNumber = nid({ alphabet: "1234567890", length: 8 });
+  const skuNumber = `SKU-1${uniqueNumber()}`;
+
   try {
     if (photo) {
-      const uploadRes = await cloudinary.uploader.upload(photo, {
-        upload_preset: "rmg-products",
-      });
+      let uploadRes = [];
+
+      for (let i = 0; i < photo.length; i++) {
+        const uploaded = await cloudinary.uploader.upload(photo[i], {
+          upload_preset: "rmg-products",
+        });
+        uploadRes.push(uploaded);
+      }
+
       if (uploadRes) {
         const product = new Product({
           name,
@@ -26,6 +35,7 @@ const createProduct = async (req, res) => {
           quantity,
           supplier,
           photo: uploadRes,
+          skuNumber,
         });
         const saveProduct = await product.save();
         res.status(200).send(saveProduct);

@@ -19,9 +19,8 @@ const DB_URI = process.env.MONGO_URI;
 app.use(
   cors({
     origin: [
-      "http://beta.rmgstock.com",
-      "https://rmgstock02.uc.r.appspot.com",
       "http://localhost:3000",
+      "http://localhost:3001",
     ],
     credentials: true,
   }),
