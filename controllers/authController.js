@@ -10,7 +10,7 @@ const RegisterUser = async (req, res) => {
   try {
     // Destructure Req Body
 
-    let { name, email, phone, companyName, address, type, password, faxNumber, website } = req.body;
+    let { name, email, phone, address, type, password, } = req.body;
 
     // Validation
 
@@ -28,8 +28,8 @@ const RegisterUser = async (req, res) => {
     if (phoneNumberExist) return res.status(401).send("Phone number is taken");
 
     // Unique ID number
-    const uniqueNumber = nid({ alphabet: "1234567890", length: 7 });
-    const userId = `RMG-0${uniqueNumber()}`;
+    const uniqueNumber = nid({ alphabet: "1234567890", length: 6 });
+    const userId = `USER-0${uniqueNumber()}`;
 
     // Hash Password
     const hashedPassword = await hashPassword(password);
@@ -39,11 +39,8 @@ const RegisterUser = async (req, res) => {
       name,
       email,
       phone,
-      companyName,
       address,
       type,
-      faxNumber,
-      website,
       userId,
       password: hashedPassword,
     });
@@ -68,7 +65,7 @@ const LoginUser = async (req, res) => {
     const matchPassword = comparePassword(password, user.password);
     if (!matchPassword) res.status(401).send("Password did not match");
 
-    const accessToken = jwt.sign({ _id: user._id, type: user.type }, process.env.JWT_ACCESS_TOKEN, {
+    const accessToken = jwt.sign({ _id: user.phone, type: user.type }, process.env.JWT_ACCESS_TOKEN, {
       expiresIn: "7d",
     });
     // Return user token to user excluding pass and send headers
