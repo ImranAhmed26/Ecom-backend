@@ -23,7 +23,7 @@ const getUsers = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  let { name, email, phone, companyName, faxNumber, website } = req.body;
+  let { name, email, phone,  } = req.body;
   try {
     let user = await User.findByIdAndUpdate(req.params.id);
     if (!user) return res.status(400).send("Error. Please try again");
@@ -31,9 +31,6 @@ const updateUser = async (req, res) => {
     if (name) user.name = name;
     if (email) user.email = email.toLowerCase();
     if (phone) user.phone = phone;
-    if (companyName) user.companyName = companyName;
-    if (faxNumber) user.faxNumber = faxNumber;
-    if (website) user.website = website.toLowerCase();
 
     const updatedUser = await user.save();
     user.password = undefined;
