@@ -3,8 +3,6 @@ import User from "../models/userSchema.js";
 
 export const validToken = (req) => {
   let token;
-  console.log("REQ ", req.headers);
-  console.log("AUTH ", req.headers.authorization);
   if (req.headers) {
     const { authorization } = req.headers;
     let match = authorization.split(" ")[1];

@@ -6,7 +6,7 @@ const createOrder = async (req, res) => {
     const { product } = req.body;
     const uniqueNumber = nid({ alphabet: "1234567890", length: 7 });
     const createOrder = new Order({
-      orderNumber: `OD-1${uniqueNumber()}`,
+      orderNumber: `ORDER-1${uniqueNumber()}`,
       product,
       user: req.user._id,
     });
@@ -21,8 +21,8 @@ const createOrder = async (req, res) => {
 const getOrders = async (req, res) => {
   try {
     const getOrders = await Order.find()
-      .populate("user", "name email phone companyName")
-      .populate("product", "name")
+      .populate("user", "name email phone ")
+      .populate("product", "name unitPrice quantity photo skuNumber")
       .sort({ createdAt: -1 });
     res.status(200).json(getOrders);
   } catch (error) {
@@ -34,8 +34,8 @@ const getOrders = async (req, res) => {
 const getMyOrders = async (req, res) => {
   try {
     const getOrders = await Order.find({ user: req.user._id })
-      .populate("user", "name email phone companyName")
-      .populate("product", "name")
+      .populate("user", "name email phone ")
+      .populate("product", "name unitPrice quantity photo skuNumber")
       .sort({ createdAt: -1 });
     res.status(200).json(getOrders);
   } catch (error) {
@@ -46,10 +46,9 @@ const getMyOrders = async (req, res) => {
 
 const getOrder = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id).populate(
-      "user",
-      "name email phone companyName",
-    );
+    const order = await Order.findById(req.params.id)
+      .populate("user", "name email phone address")
+      .populate("product", "name unitPrice quantity photo skuNumber");
     res.status(200).json(order);
   } catch (error) {
     console.log(error);

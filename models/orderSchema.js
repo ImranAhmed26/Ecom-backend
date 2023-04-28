@@ -14,6 +14,7 @@ const OrderSchema = new mongoose.Schema(
       phone: String,
       companyName: String,
     },
+    quantity: { type: Number, default: 1 },
     isDelivered: { type: Boolean, default: false },
     deliveredAt: { type: Date },
   },
