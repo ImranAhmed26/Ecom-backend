@@ -28,8 +28,8 @@ const RegisterUser = async (req, res) => {
     if (phoneNumberExist) return res.status(401).send("Phone number is taken");
 
     // Unique ID number
-    const uniqueNumber = nid({ alphabet: "1234567890", length: 7 });
-    const userId = `RMG-0${uniqueNumber()}`;
+    const uniqueNumber = nid({ alphabet: "1234567890", length: 6 });
+    const userId = `USER-0${uniqueNumber()}`;
 
     // Hash Password
     const hashedPassword = await hashPassword(password);
@@ -66,7 +66,7 @@ const LoginUser = async (req, res) => {
     if (!matchPassword) res.status(401).send("Password did not match");
 
     const accessToken = jwt.sign(
-      { phone: user.phone, type: user.type },
+      { phone: user.phone, _id: user._id, type: user.type },
       process.env.JWT_ACCESS_TOKEN,
       {
         expiresIn: "7d",
