@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import nid from "nid";
 
-import User from "../models/userSchema.js";
+import User from "../models/userSchema.js"; 
 import { comparePassword, hashPassword } from "../utils/auth.js";
 
 // Register User
