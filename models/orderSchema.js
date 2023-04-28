@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const { ObjectId } = mongoose.Schema;
 
-const RequestInfoSchema = new mongoose.Schema(
+const OrderSchema = new mongoose.Schema(
   {
-    requestName: { type: String, required: true },
+    orderNumber: { type: String, required: true },
     productName: String,
     product: { type: ObjectId, ref: "Product", required: true },
     user: { type: ObjectId, ref: "User", required: true },
@@ -14,10 +14,12 @@ const RequestInfoSchema = new mongoose.Schema(
       phone: String,
       companyName: String,
     },
+    isDelivered: { type: Boolean, default: false },
+    deliveredAt: { type: Date },
   },
   { timestamps: true },
 );
 
-const RequestInfo = mongoose.model("RequestInfo", RequestInfoSchema);
+const Order = mongoose.model("Order", OrderSchema);
 
-export default RequestInfo;
+export default Order;

@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import authRouter from "./routes/auth.js";
 import userRouter from "./routes/user.js";
 import productRouter from "./routes/product.js";
-import requestInfoRouter from "./routes/requestInfo.js";
+import orderRouter from "./routes/order.js";
 
 // Configuration
 dotenv.config();
@@ -18,10 +18,7 @@ const DB_URI = process.env.MONGO_URI;
 // Middleware
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "http://localhost:3001",
-    ],
+    origin: ["http://localhost:3000", "http://localhost:3001"],
     credentials: true,
   }),
 );
@@ -37,7 +34,7 @@ app.all("/", (req, res) => {
 app.use("/api/v1/user", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/products", productRouter);
-app.use("/api/v1/requests", requestInfoRouter);
+app.use("/api/v1/orders", orderRouter);
 
 app.all("*", (req, res) => res.status(404).send({ message: "Could not find any resource!" }));
 

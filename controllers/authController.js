@@ -10,7 +10,7 @@ const RegisterUser = async (req, res) => {
   try {
     // Destructure Req Body
 
-    let { name, email, phone, companyName, address, type, password, faxNumber, website } = req.body;
+    let { name, email, phone, address, type, password } = req.body;
 
     // Validation
 
@@ -39,11 +39,8 @@ const RegisterUser = async (req, res) => {
       name,
       email,
       phone,
-      companyName,
       address,
       type,
-      faxNumber,
-      website,
       userId,
       password: hashedPassword,
     });
@@ -68,10 +65,14 @@ const LoginUser = async (req, res) => {
     const matchPassword = comparePassword(password, user.password);
     if (!matchPassword) res.status(401).send("Password did not match");
 
-    const accessToken = jwt.sign({ _id: user._id, type: user.type }, process.env.JWT_ACCESS_TOKEN, {
-      expiresIn: "7d",
-    });
-    // Return user token to user excluding pass and send headers
+    const accessToken = jwt.sign(
+      { phone: user.phone, type: user.type },
+      process.env.JWT_ACCESS_TOKEN,
+      {
+        expiresIn: "7d",
+      },
+    );
+    // Return user token to user excluding password and send headers
     user.password = undefined;
     user.isActive = undefined;
     user.membershipStatus = undefined;
