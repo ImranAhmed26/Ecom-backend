@@ -2,12 +2,19 @@ import Order from "../models/orderSchema.js";
 import nid from "nid";
 
 const createOrder = async (req, res) => {
+
   try {
-    const { product } = req.body;
+    const products = req.body;
     const uniqueNumber = nid({ alphabet: "1234567890", length: 7 });
+    const items = [];
+    for (let i = 0; i < products.length; i++) {
+      const { id, quantity } = products[i];
+      const item = { product: id, quantity };
+      items.push(item);
+    }
     const createOrder = new Order({
       orderNumber: `ORDER-1${uniqueNumber()}`,
-      product,
+      items,
       user: req.user._id,
     });
     const saveOrder = await createOrder.save();
@@ -22,7 +29,7 @@ const getOrders = async (req, res) => {
   try {
     const getOrders = await Order.find()
       .populate("user", "name email phone ")
-      .populate("product", "name unitPrice quantity photo skuNumber")
+      .populate("items.product", "name unitPrice quantity photo skuNumber")
       .sort({ createdAt: -1 });
     res.status(200).json(getOrders);
   } catch (error) {
@@ -35,7 +42,7 @@ const getMyOrders = async (req, res) => {
   try {
     const getOrders = await Order.find({ user: req.user._id })
       .populate("user", "name email phone ")
-      .populate("product", "name unitPrice quantity photo skuNumber")
+      .populate("items.product", "name unitPrice quantity photo skuNumber")
       .sort({ createdAt: -1 });
     res.status(200).json(getOrders);
   } catch (error) {
@@ -48,7 +55,7 @@ const getOrder = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id)
       .populate("user", "name email phone address")
-      .populate("product", "name unitPrice quantity photo skuNumber");
+      .populate("items.product", "name unitPrice quantity photo skuNumber");
     res.status(200).json(order);
   } catch (error) {
     console.log(error);
@@ -58,7 +65,7 @@ const getOrder = async (req, res) => {
 
 const updateOrder = async (req, res) => {
   try {
-    const order = await Order.findByIdAndUpdate(req.params.id);
+    const order = await Order.findById(req.params.id);
 
     if (order) {
       order.isDelivered = true;
