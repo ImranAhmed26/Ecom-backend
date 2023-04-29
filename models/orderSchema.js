@@ -17,7 +17,7 @@ const OrderSchema = new mongoose.Schema(
     orderNumber: { type: String, required: true },
     items: [OrderItemSchema],
     user: { type: ObjectId, ref: "User", required: true },
-    isDelivered: { type: Boolean, default: false },
+    isDelivered: { type: Boolean, default: false }, 
     deliveredAt: { type: Date },
   },
   { timestamps: true },
