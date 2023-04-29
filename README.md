@@ -18,9 +18,9 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-
-Remember, the to use the frontend part along with this backend project for full functionality:
-
 ```bash
-[frontend project](https://github.com/ImranAhmed26/Ecom-frontend)
+Remember, the to use the frontend part along with this backend project for full functionality:
 ```
+
+[frontend project](https://github.com/ImranAhmed26/Ecom-frontend)
+
