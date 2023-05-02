@@ -63,9 +63,6 @@ const LoginUser = async (req, res) => {
     if (!user) return res.status(404).send("User with email Id not found");
 
     const matchPassword = await comparePassword(password, user.password);
-    console.log("password", password);
-    console.log("user.password", user.password);
-    console.log("matchPassword", matchPassword);
     if (!matchPassword) return res.status(401).send("Password did not match");
 
     const accessToken = jwt.sign(
