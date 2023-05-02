@@ -62,8 +62,11 @@ const LoginUser = async (req, res) => {
     const user = await User.findOne({ email }).exec();
     if (!user) return res.status(404).send("User with email Id not found");
 
-    const matchPassword = comparePassword(password, user.password);
-    if (!matchPassword) res.status(401).send("Password did not match");
+    const matchPassword = await comparePassword(password, user.password);
+    console.log("password", password);
+    console.log("user.password", user.password);
+    console.log("matchPassword", matchPassword);
+    if (!matchPassword) return res.status(401).send("Password did not match");
 
     const accessToken = jwt.sign(
       { phone: user.phone, _id: user._id, type: user.type },
@@ -72,17 +75,11 @@ const LoginUser = async (req, res) => {
         expiresIn: "7d",
       },
     );
-    // Return user token to user excluding password and send headers
+
     user.password = undefined;
     user.isActive = undefined;
     user.membershipStatus = undefined;
 
-    // Method using Cookie
-    // res.cookie("token", accessToken, {
-    //   httpOnly: true,
-    //   // secure: true, // only works on https // for production
-    //   //Send User as Json Response
-    // });
     res.json({ user, token: accessToken });
     console.log("Login successful");
   } catch (error) {
