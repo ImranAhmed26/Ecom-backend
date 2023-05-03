@@ -17,7 +17,7 @@ npm install
 Then, run the development server:
 npm run dev
 
-Open http://localhost:3000 in your browser to see the result.
+Open http://localhost:8080 in your browser to ensure your api server is up and running.
 ```
 
 Remember, the to use the frontend part along with this backend project for full functionality:
